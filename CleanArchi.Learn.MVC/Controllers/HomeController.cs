@@ -1,5 +1,6 @@
 ﻿using CleanArchi.Learn.Application.Features.Products;
 using CleanArchi.Learn.Application.Features.Products.Commands;
+using CleanArchi.Learn.Application.Features.Products.Commands.DeleteProduct;
 using CleanArchi.Learn.Application.Features.Products.Commands.UpdateProduct;
 using CleanArchi.Learn.Application.Features.Products.Queries.GetProduct;
 using MediatR;
@@ -54,7 +55,7 @@ namespace CleanArchi.Learn.MVC.Controllers
                 return Content(ex.Message);
             }
         }
-        public async Task<IActionResult> UpdateAsync(GetProductQuery getProductQuery)
+        public async Task<IActionResult> Update(GetProductQuery getProductQuery)
         {
             try
             {
@@ -73,6 +74,31 @@ namespace CleanArchi.Learn.MVC.Controllers
             try
             {
                 await _mediator.Send(updateProductCommand);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.Message);
+            }
+        }
+        public async Task<IActionResult> Delete(GetProductQuery getProductQuery)
+        {
+            try
+            {
+                var product = await _mediator.Send(getProductQuery);
+                return View(product);
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.Message);
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(DeleteProductCommand deleteProductCommand)
+        {
+            try
+            {
+                await _mediator.Send(deleteProductCommand);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

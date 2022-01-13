@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchi.Learn.Application.Features.Products.Commands;
+using CleanArchi.Learn.Application.Features.Products.Commands.DeleteProduct;
 using CleanArchi.Learn.Application.Features.Products.Commands.UpdateProduct;
 using CleanArchi.Learn.Application.Features.Products.Queries.GetAllProducts;
 using CleanArchi.Learn.Application.Features.Products.Queries.GetProduct;
@@ -18,6 +19,7 @@ namespace CleanArchi.Learn.Application.Profiles
             CreateMap<Product, AddProductQuery>().ReverseMap();
             CreateMap<Product, GetProductVm>().ReverseMap();
             CreateMap<Product, UpdateProductCommand>().ReverseMap();
+            CreateMap<Product, DeleteProductCommand>().ReverseMap();
         }
     }
 }
