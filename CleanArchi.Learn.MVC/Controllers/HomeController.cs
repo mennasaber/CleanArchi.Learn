@@ -1,14 +1,11 @@
 ﻿using CleanArchi.Learn.Application.Features.Products;
 using CleanArchi.Learn.Application.Features.Products.Commands;
+using CleanArchi.Learn.Application.Features.Products.Commands.UpdateProduct;
 using CleanArchi.Learn.Application.Features.Products.Queries.GetProduct;
-using CleanArchi.Learn.MVC.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CleanArchi.Learn.MVC.Controllers
@@ -25,7 +22,7 @@ namespace CleanArchi.Learn.MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var products =await _mediator.Send(new GetAllProductsQuery());
+            var products = await _mediator.Send(new GetAllProductsQuery());
             return View(products);
         }
         public IActionResult Add()
@@ -35,13 +32,53 @@ namespace CleanArchi.Learn.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddProductQuery addProductQuery)
         {
-            var productId = await _mediator.Send(addProductQuery);
-            return RedirectToAction("Index");
+            try
+            {
+                await _mediator.Send(addProductQuery);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.Message);
+            }
         }
         public async Task<IActionResult> Details(GetProductQuery getProductQuery)
         {
-            var product= await _mediator.Send(getProductQuery);
-            return View(product);
+            try
+            {
+                var product = await _mediator.Send(getProductQuery);
+                return View(product);
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.Message);
+            }
+        }
+        public async Task<IActionResult> UpdateAsync(GetProductQuery getProductQuery)
+        {
+            try
+            {
+                var product = await _mediator.Send(getProductQuery);
+                return View(product);
+            }
+
+            catch (Exception ex)
+            {
+                return Content(ex.Message);
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateProductCommand updateProductCommand)
+        {
+            try
+            {
+                await _mediator.Send(updateProductCommand);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.Message);
+            }
         }
     }
 }
