@@ -4,7 +4,9 @@ using CleanArchi.Learn.Application.Features.Products.Commands.DeleteProduct;
 using CleanArchi.Learn.Application.Features.Products.Commands.UpdateProduct;
 using CleanArchi.Learn.Application.Features.Products.Queries.GetAllProducts;
 using CleanArchi.Learn.Application.Features.Products.Queries.GetProduct;
+using CleanArchi.Learn.Application.Features.User.Commands.AddUser;
 using CleanArchi.Learn.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,6 +22,7 @@ namespace CleanArchi.Learn.Application.Profiles
             CreateMap<Product, GetProductVm>().ReverseMap();
             CreateMap<Product, UpdateProductCommand>().ReverseMap();
             CreateMap<Product, DeleteProductCommand>().ReverseMap();
+            CreateMap<IdentityUser, AddUserCommand>().ReverseMap();
         }
     }
 }
