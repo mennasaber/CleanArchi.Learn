@@ -1,5 +1,6 @@
 ﻿using CleanArchi.Learn.Application.Contracts;
 using CleanArchi.Learn.Domain;
+using CleanArchi.Learn.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -10,24 +11,27 @@ namespace CleanArchi.Learn.Persistence.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public UserRepository(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager)
+        public UserRepository(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
         }
 
-        public Task<IdentityUser> AddAsync(IdentityUser entity)
+        public Task<User> AddAsync(User entity)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IdentityResult> SignUpAsync(IdentityUser user, string password)
+        public async Task<IdentityResult> SignUpAsync(User user, string password)
         {
+            //Always return null
+            var nameIsExist = await _userManager.FindByNameAsync(user.UserName.ToUpper().Normalize());
+            if (nameIsExist != null) return null;
             var result = await _userManager.CreateAsync(user, password);
             if (result.Succeeded)
             {
@@ -41,22 +45,22 @@ namespace CleanArchi.Learn.Persistence.Repositories
             return result;
         }
 
-        public Task DeleteAsync(IdentityUser entity)
+        public Task DeleteAsync(User entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<IdentityUser>> GetAllAsync()
+        public Task<IEnumerable<User>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IdentityUser> GetByIdAsync(int id)
+        public Task<User> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IdentityUser> LoginAsync(string email, string password)
+        public async Task<User> LoginAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user != null)
@@ -64,14 +68,14 @@ namespace CleanArchi.Learn.Persistence.Repositories
                 var isValid = await _userManager.CheckPasswordAsync(user, password);
                 if (isValid)
                 {
-                    await _signInManager.PasswordSignInAsync(user,password,false,user.LockoutEnabled);
+                    await _signInManager.PasswordSignInAsync(user, password, false, user.LockoutEnabled);
                     return user;
                 }
             }
             return null;
         }
 
-        public Task UpdateAsync(IdentityUser entity)
+        public Task UpdateAsync(User entity)
         {
             throw new NotImplementedException();
         }

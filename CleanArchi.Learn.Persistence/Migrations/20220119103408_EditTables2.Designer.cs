@@ -4,14 +4,16 @@ using CleanArchi.Learn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CleanArchi.Learn.Persistence.Migrations
 {
     [DbContext(typeof(CleanArchiDbContext))]
-    partial class CleanArchiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220119103408_EditTables2")]
+    partial class EditTables2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,7 +28,10 @@ namespace CleanArchi.Learn.Persistence.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OrderId1")
                         .HasColumnType("int");
 
                     b.Property<int?>("ProductId")
@@ -38,6 +43,8 @@ namespace CleanArchi.Learn.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("OrderId1");
 
                     b.HasIndex("ProductId");
 
@@ -60,9 +67,14 @@ namespace CleanArchi.Learn.Persistence.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Orders");
                 });
@@ -297,8 +309,14 @@ namespace CleanArchi.Learn.Persistence.Migrations
             modelBuilder.Entity("CleanArchi.Learn.Domain.Entities.Item", b =>
                 {
                     b.HasOne("CleanArchi.Learn.Domain.Entities.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchi.Learn.Domain.Entities.Order", null)
                         .WithMany("Items")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId1");
 
                     b.HasOne("CleanArchi.Learn.Domain.Entities.Product", "Product")
                         .WithMany()
@@ -311,9 +329,13 @@ namespace CleanArchi.Learn.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchi.Learn.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("CleanArchi.Learn.Domain.Entities.User", "User")
+                    b.HasOne("CleanArchi.Learn.Domain.Entities.User", null)
                         .WithMany("Orders")
                         .HasForeignKey("UserId");
+
+                    b.HasOne("CleanArchi.Learn.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("User");
                 });

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace CleanArchi.Learn.Application.Features.User.Commands.AddUser
+namespace CleanArchi.Learn.Application.Features.Users.Commands.AddUser
 {
     public class UserSignUpCommand : IRequest<IdentityResult>
     {

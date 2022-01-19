@@ -9,6 +9,8 @@ namespace CleanArchi.Learn.Persistence
 {
     public class CleanArchiDbContext : IdentityDbContext
     {
+        public DbSet<Item> Items { get; set; }
+        public DbSet<Order> Orders { get; set; }
         public CleanArchiDbContext(DbContextOptions<CleanArchiDbContext> options)
            : base(options)
         {

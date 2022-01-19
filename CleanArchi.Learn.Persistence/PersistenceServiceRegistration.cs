@@ -1,4 +1,5 @@
 ﻿using CleanArchi.Learn.Application.Contracts;
+using CleanArchi.Learn.Domain.Entities;
 using CleanArchi.Learn.Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,13 +17,14 @@ namespace CleanArchi.Learn.Persistence
         {
             services.AddDbContext<CleanArchiDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("ConnectionString")));
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
-             {
-                 options.User.RequireUniqueEmail = true;
-             })
+            services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<CleanArchiDbContext>();
+            services.Configure<IdentityOptions>(opts => {
+                opts.User.RequireUniqueEmail = true;
+            });
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             return services;
         }
     }

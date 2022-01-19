@@ -1,14 +1,12 @@
 ﻿using CleanArchi.Learn.Domain;
+using CleanArchi.Learn.Domain.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace CleanArchi.Learn.Application.Features.User.Queries.GetUser
+namespace CleanArchi.Learn.Application.Features.Users.Queries.GetUser
 {
-    public class UserLoginQuery : IRequest<IdentityUser>
+    public class UserLoginQuery : IRequest<User>
     {
         [Required(ErrorMessage =AppConstants.EMAIL_REQUIRED_MESSAGE)]
         [EmailAddress]

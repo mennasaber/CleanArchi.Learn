@@ -17,4 +17,8 @@
     <ProjectReference Include="..\CleanArchi.Learn.Persistence\CleanArchi.Learn.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Order\" />
+  </ItemGroup>
+
 </Project>

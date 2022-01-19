@@ -1,5 +1,5 @@
-﻿using CleanArchi.Learn.Application.Features.User.Commands.AddUser;
-using CleanArchi.Learn.Application.Features.User.Queries.GetUser;
+﻿using CleanArchi.Learn.Application.Features.Users.Commands.AddUser;
+using CleanArchi.Learn.Application.Features.Users.Queries.GetUser;
 using CleanArchi.Learn.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +26,7 @@ namespace CleanArchi.Learn.MVC.Controllers
             var user = await _mediator.Send(getUserQuery);
             if (user != null)
             {
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index", "Home");
             }
             ModelState.TryAddModelError("Login", AppConstants.INVALID_LOGIN);
             return View(getUserQuery);
@@ -36,11 +36,16 @@ namespace CleanArchi.Learn.MVC.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> SignUp(UserSignUpCommand addUserCommand)
+        public async Task<IActionResult> SignUp(UserSignUpCommand userSignUpCommand)
         {
             try
             {
-                var result = await _mediator.Send(addUserCommand);
+                var result = await _mediator.Send(userSignUpCommand);
+                if (result == null)
+                {
+                    ModelState.AddModelError("Username", "This username is token");
+                    return View(userSignUpCommand);
+                }
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
@@ -49,7 +54,7 @@ namespace CleanArchi.Learn.MVC.Controllers
                 {
                     ModelState.AddModelError(error.Code, error.Description);
                 }
-                return View(addUserCommand);
+                return View(userSignUpCommand);
             }
             catch (Exception ex)
             {
