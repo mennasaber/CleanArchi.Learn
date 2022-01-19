@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CleanArchi.Learn.Application.Features.User.Commands.AddUser
 {
-    public class AddUserCommand : IRequest<IdentityResult>
+    public class UserSignUpCommand : IRequest<IdentityResult>
     {
         [Required(ErrorMessage = AppConstants.USERNAME_REQUIRED_MESSAGE)]
         public string Username { get; set; }

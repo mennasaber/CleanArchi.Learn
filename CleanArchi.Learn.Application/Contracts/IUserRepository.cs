@@ -8,7 +8,7 @@ namespace CleanArchi.Learn.Application.Contracts
 {
     public interface IUserRepository : IAsyncRepository<IdentityUser>
     {
-        Task<IdentityResult> AddAsync(IdentityUser entity,string password);
+        Task<IdentityResult> SignUpAsync(IdentityUser user,string password);
         Task<IdentityUser> LoginAsync(string email, string password);
     }
 }

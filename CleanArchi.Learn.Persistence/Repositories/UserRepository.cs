@@ -26,17 +26,17 @@ namespace CleanArchi.Learn.Persistence.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<IdentityResult> AddAsync(IdentityUser entity, string password)
+        public async Task<IdentityResult> SignUpAsync(IdentityUser user, string password)
         {
-            var result = await _userManager.CreateAsync(entity, password);
+            var result = await _userManager.CreateAsync(user, password);
             if (result.Succeeded)
             {
                 if (!await _roleManager.RoleExistsAsync(AppConstants.USER_ROLE))
                 {
                     await _roleManager.CreateAsync(new IdentityRole(AppConstants.USER_ROLE));
                 }
-                await _userManager.AddToRoleAsync(entity, AppConstants.USER_ROLE);
-                await _signInManager.SignInAsync(entity, isPersistent: false);
+                await _userManager.AddToRoleAsync(user, AppConstants.USER_ROLE);
+                await _signInManager.SignInAsync(user, isPersistent: false);
             }
             return result;
         }

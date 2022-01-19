@@ -22,7 +22,7 @@ namespace CleanArchi.Learn.Application.Profiles
             CreateMap<Product, GetProductVm>().ReverseMap();
             CreateMap<Product, UpdateProductCommand>().ReverseMap();
             CreateMap<Product, DeleteProductCommand>().ReverseMap();
-            CreateMap<IdentityUser, AddUserCommand>().ReverseMap();
+            CreateMap<IdentityUser, UserSignUpCommand>().ReverseMap();
         }
     }
 }

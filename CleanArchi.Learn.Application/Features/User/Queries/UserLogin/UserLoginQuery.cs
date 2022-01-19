@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CleanArchi.Learn.Application.Features.User.Queries.GetUser
 {
-    public class GetUserQuery : IRequest<IdentityUser>
+    public class UserLoginQuery : IRequest<IdentityUser>
     {
         [Required(ErrorMessage =AppConstants.EMAIL_REQUIRED_MESSAGE)]
         [EmailAddress]

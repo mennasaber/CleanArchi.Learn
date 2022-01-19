@@ -3,6 +3,7 @@ using CleanArchi.Learn.Application.Features.Products.Commands;
 using CleanArchi.Learn.Application.Features.Products.Commands.DeleteProduct;
 using CleanArchi.Learn.Application.Features.Products.Commands.UpdateProduct;
 using CleanArchi.Learn.Application.Features.Products.Queries.GetProduct;
+using CleanArchi.Learn.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchi.Learn.MVC.Controllers
 {
-    [Authorize]
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -28,6 +29,7 @@ namespace CleanArchi.Learn.MVC.Controllers
             return View(products);
         }
 
+        [Authorize(Roles = AppConstants.ADMIN_ROLE)]
         public IActionResult Add()
         {
             return View();
@@ -58,6 +60,7 @@ namespace CleanArchi.Learn.MVC.Controllers
             }
         }
 
+        [Authorize(Roles = AppConstants.ADMIN_ROLE)]
         public async Task<IActionResult> Update(GetProductQuery getProductQuery)
         {
             try
@@ -85,6 +88,7 @@ namespace CleanArchi.Learn.MVC.Controllers
             }
         }
 
+        [Authorize(Roles = AppConstants.ADMIN_ROLE)]
         public async Task<IActionResult> Delete(GetProductQuery getProductQuery)
         {
             try

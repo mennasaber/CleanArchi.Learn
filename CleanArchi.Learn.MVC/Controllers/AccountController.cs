@@ -1,5 +1,6 @@
 ﻿using CleanArchi.Learn.Application.Features.User.Commands.AddUser;
 using CleanArchi.Learn.Application.Features.User.Queries.GetUser;
+using CleanArchi.Learn.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -20,14 +21,14 @@ namespace CleanArchi.Learn.MVC.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(GetUserQuery getUserQuery)
+        public async Task<IActionResult> Login(UserLoginQuery getUserQuery)
         {
             var user = await _mediator.Send(getUserQuery);
             if (user != null)
             {
                 return RedirectToAction("Index","Home");
             }
-            ModelState.TryAddModelError("Login", "Invalid email or password");
+            ModelState.TryAddModelError("Login", AppConstants.INVALID_LOGIN);
             return View(getUserQuery);
         }
         public IActionResult SignUp()
@@ -35,7 +36,7 @@ namespace CleanArchi.Learn.MVC.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> SignUp(AddUserCommand addUserCommand)
+        public async Task<IActionResult> SignUp(UserSignUpCommand addUserCommand)
         {
             try
             {
@@ -54,6 +55,10 @@ namespace CleanArchi.Learn.MVC.Controllers
             {
                 return Content(ex.Message);
             }
+        }
+        public IActionResult AccessDenied()
+        {
+            return Content(AppConstants.ACCESS_DENIED);
         }
     }
 }

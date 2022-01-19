@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace CleanArchi.Learn.Application.Features.User.Queries.GetUser
 {
-    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, IdentityUser>
+    public class UserLoginQueryHandler : IRequestHandler<UserLoginQuery, IdentityUser>
     {
         private readonly IUserRepository _userRepository;
 
-        public GetUserQueryHandler(IUserRepository userRepository)
+        public UserLoginQueryHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
 
-        public async Task<IdentityUser> Handle(GetUserQuery request, CancellationToken cancellationToken)
+        public async Task<IdentityUser> Handle(UserLoginQuery request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.LoginAsync(request.Email, request.Password);
             return user;
