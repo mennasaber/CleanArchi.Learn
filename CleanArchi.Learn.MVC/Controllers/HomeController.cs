@@ -124,22 +124,7 @@ namespace CleanArchi.Learn.MVC.Controllers
         public async Task<IActionResult> AddToCart(int id)
         {
             await _mediator.Send(new AddItemToCartQuery() { ProductId = id });
-            return RedirectToAction("MyCart");
-        }
-        public async Task<IActionResult> DecreaseFromCart(int id)
-        {
-            await _mediator.Send(new DecreaseItemFromCartQuery() { ProductId = id });
-            return RedirectToAction("MyCart");
-        }
-        public async Task<IActionResult> DeleteFromCart(int id)
-        {
-            await _mediator.Send(new DeleteItemFromCartQuery() { ProductId = id });
-            return RedirectToAction("MyCart");
-        }
-        public async Task<IActionResult> MyCart()
-        {
-            var items = await _mediator.Send(new GetCartItemsQuery());
-            return View(items);
+            return RedirectToAction("Index" , "Order");
         }
     }
 }

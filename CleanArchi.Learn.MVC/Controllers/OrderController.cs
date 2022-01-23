@@ -1,4 +1,8 @@
-﻿using CleanArchi.Learn.Application.Features.Orders.Queries.GetOrder;
+﻿using CleanArchi.Learn.Application.Features.Orders.Queries.AddItemToCart;
+using CleanArchi.Learn.Application.Features.Orders.Queries.DecreaseItemFromCart;
+using CleanArchi.Learn.Application.Features.Orders.Queries.DeleteItemFromCart;
+using CleanArchi.Learn.Application.Features.Orders.Queries.GetCartItems;
+using CleanArchi.Learn.Application.Features.Orders.Queries.GetOrder;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -13,11 +17,25 @@ namespace CleanArchi.Learn.MVC.Controllers
         {
             _mediator = mediator;
         }
-        
-        //public async Task<IActionResult> Index()
-        //{
-        //    //var order = await _mediator.Send(new GetOrderQuery() { Id=1});
-        //    //return View(order);
-        //}
+        public async Task<IActionResult> Index()
+        {
+            var items = await _mediator.Send(new GetCartItemsQuery());
+            return View(items);
+        }
+        public async Task<IActionResult> IncreaseItemQuantity(int id)
+        {
+            await _mediator.Send(new AddItemToCartQuery() { ProductId = id });
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> DecreaseItemQuantity(int id)
+        {
+            await _mediator.Send(new DecreaseItemFromCartQuery() { ProductId = id });
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> DeleteItem(int id)
+        {
+            await _mediator.Send(new DeleteItemFromCartQuery() { ProductId = id });
+            return RedirectToAction("Index");
+        }
     }
 }

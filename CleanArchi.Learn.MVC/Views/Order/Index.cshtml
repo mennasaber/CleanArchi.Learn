@@ -6,9 +6,6 @@
 
 <h1>MyCart</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -32,9 +29,9 @@
                     @Html.DisplayFor(modelItem => item.Quantity)
                 </td>
                 <td>
-                    @Html.ActionLink("Decrease", "DecreaseFromCart", new {  id=item.Product.Id  }) |
-                    @Html.ActionLink("Increase", "AddToCart", new {  id=item.Product.Id }) |
-                    @Html.ActionLink("Delete", "DeleteFromCart", new {  id=item.Product.Id  })
+                    @Html.ActionLink("Decrease", "DecreaseItemQuantity", new {  id=item.Product.Id  }) |
+                    @Html.ActionLink("Increase", "IncreaseItemQuantity", new {  id=item.Product.Id }) |
+                    @Html.ActionLink("Delete", "DeleteItem", new {  id=item.Product.Id  })
                 </td>
             </tr>
         }
