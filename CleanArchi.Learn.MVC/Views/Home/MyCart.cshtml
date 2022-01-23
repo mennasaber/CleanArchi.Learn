@@ -1,0 +1,42 @@
+﻿@model IEnumerable<CleanArchi.Learn.Domain.Entities.Item>
+
+@{
+    ViewData["Title"] = "MyCart";
+}
+
+<h1>MyCart</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.ActionLink("Decrease", "DecreaseFromCart", new {  id=item.Product.Id  }) |
+                    @Html.ActionLink("Increase", "AddToCart", new {  id=item.Product.Id }) |
+                    @Html.ActionLink("Delete", "DeleteFromCart", new {  id=item.Product.Id  })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

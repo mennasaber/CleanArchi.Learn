@@ -13,7 +13,7 @@ namespace CleanArchi.Learn.MVC.Controllers
         {
             _mediator = mediator;
         }
-
+        
         //public async Task<IActionResult> Index()
         //{
         //    //var order = await _mediator.Send(new GetOrderQuery() { Id=1});

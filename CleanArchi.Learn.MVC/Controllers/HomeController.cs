@@ -1,19 +1,26 @@
-﻿using CleanArchi.Learn.Application.Features.Products;
+﻿using CleanArchi.Learn.Application.Features.Orders.Queries.AddItemToCart;
+using CleanArchi.Learn.Application.Features.Orders.Queries.DecreaseItemFromCart;
+using CleanArchi.Learn.Application.Features.Orders.Queries.DeleteItemFromCart;
+using CleanArchi.Learn.Application.Features.Orders.Queries.GetCartItems;
+using CleanArchi.Learn.Application.Features.Products;
 using CleanArchi.Learn.Application.Features.Products.Commands;
 using CleanArchi.Learn.Application.Features.Products.Commands.DeleteProduct;
 using CleanArchi.Learn.Application.Features.Products.Commands.UpdateProduct;
 using CleanArchi.Learn.Application.Features.Products.Queries.GetProduct;
 using CleanArchi.Learn.Domain;
+using CleanArchi.Learn.Domain.Entities;
+using CleanArchi.Learn.MVC.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CleanArchi.Learn.MVC.Controllers
 {
-    
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -113,6 +120,26 @@ namespace CleanArchi.Learn.MVC.Controllers
             {
                 return Content(ex.Message);
             }
+        }
+        public async Task<IActionResult> AddToCart(int id)
+        {
+            await _mediator.Send(new AddItemToCartQuery() { ProductId = id });
+            return RedirectToAction("MyCart");
+        }
+        public async Task<IActionResult> DecreaseFromCart(int id)
+        {
+            await _mediator.Send(new DecreaseItemFromCartQuery() { ProductId = id });
+            return RedirectToAction("MyCart");
+        }
+        public async Task<IActionResult> DeleteFromCart(int id)
+        {
+            await _mediator.Send(new DeleteItemFromCartQuery() { ProductId = id });
+            return RedirectToAction("MyCart");
+        }
+        public async Task<IActionResult> MyCart()
+        {
+            var items = await _mediator.Send(new GetCartItemsQuery());
+            return View(items);
         }
     }
 }
