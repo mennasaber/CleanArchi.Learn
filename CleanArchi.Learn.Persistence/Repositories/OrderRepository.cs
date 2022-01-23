@@ -21,11 +21,11 @@ namespace CleanArchi.Learn.Persistence.Repositories
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<Order> AddAsync(Order entity)
+        public  Task<Order> AddAsync(Order entity)
         {
             _context.Orders.Add(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+             _context.SaveChanges();
+            return Task.FromResult(entity);
         }
 
         public void AddToCart(int productId)

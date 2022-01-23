@@ -1,6 +1,8 @@
 ﻿using CleanArchi.Learn.Application.Contracts;
 using CleanArchi.Learn.Domain;
 using CleanArchi.Learn.Domain.Entities;
+using CleanArchi.Learn.MVC.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -14,12 +16,13 @@ namespace CleanArchi.Learn.Persistence.Repositories
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<User> _signInManager;
-
-        public UserRepository(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UserRepository(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public Task<User> AddAsync(User entity)
@@ -40,11 +43,22 @@ namespace CleanArchi.Learn.Persistence.Repositories
                     await _roleManager.CreateAsync(new IdentityRole(AppConstants.USER_ROLE));
                 }
                 await _userManager.AddToRoleAsync(user, AppConstants.USER_ROLE);
+                SaveUserId(user.Id);
                 await _signInManager.SignInAsync(user, isPersistent: false);
             }
             return result;
         }
-
+        private void SaveUserId(string userId)
+        {
+            if (SessionHelper.GetObjectFromJson<string>(_httpContextAccessor.HttpContext.Session, "user") == null)
+            {
+                SessionHelper.SetObjectAsJson(_httpContextAccessor.HttpContext.Session, "user", userId);
+            }
+        }
+        private string GetUserId()
+        {
+            return SessionHelper.GetObjectFromJson<string>(_httpContextAccessor.HttpContext.Session, "user");
+        }
         public Task DeleteAsync(User entity)
         {
             throw new NotImplementedException();
@@ -59,7 +73,11 @@ namespace CleanArchi.Learn.Persistence.Repositories
         {
             throw new NotImplementedException();
         }
-
+        public async Task<User> GetCurrentUser()
+        {
+            var user = await _userManager.FindByIdAsync(GetUserId());
+            return user;
+        }
         public async Task<User> LoginAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -69,6 +87,7 @@ namespace CleanArchi.Learn.Persistence.Repositories
                 if (isValid)
                 {
                     await _signInManager.PasswordSignInAsync(user, password, false, user.LockoutEnabled);
+                    SaveUserId(user.Id);
                     return user;
                 }
             }

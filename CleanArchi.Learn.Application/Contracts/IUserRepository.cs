@@ -11,5 +11,6 @@ namespace CleanArchi.Learn.Application.Contracts
     {
         Task<IdentityResult> SignUpAsync(User user,string password);
         Task<User> LoginAsync(string email, string password);
+        public Task<User> GetCurrentUser();
     }
 }
