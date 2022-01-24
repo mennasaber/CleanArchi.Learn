@@ -4,14 +4,16 @@ using CleanArchi.Learn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CleanArchi.Learn.Persistence.Migrations
 {
     [DbContext(typeof(CleanArchiDbContext))]
-    partial class CleanArchiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220124130349_AddItemsToProduct")]
+    partial class AddItemsToProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

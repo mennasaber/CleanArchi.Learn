@@ -15,5 +15,9 @@ namespace CleanArchi.Learn.MVC.Models
             var value = session.GetString(key);
             return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
         }
+        public static void RemoveObject(this ISession session,string key)
+        {
+            session.Remove(key);
+        }
     }
 }

@@ -18,6 +18,10 @@ namespace CleanArchi.Learn.Persistence
         public DbSet<Product> Products { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Product>()
+       .HasMany(c => c.Items)
+       .WithOne(e => e.Product)
+       .HasForeignKey(e => e.ProductId);
             base.OnModelCreating(modelBuilder);
         }
     }

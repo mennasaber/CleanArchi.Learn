@@ -21,10 +21,11 @@ namespace CleanArchi.Learn.Persistence.Repositories
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public  Task<Order> AddAsync(Order entity)
+        public Task<Order> AddAsync(Order entity)
         {
             _context.Orders.Add(entity);
-             _context.SaveChanges();
+            _context.SaveChanges();
+            SessionHelper.RemoveObject(_httpContextAccessor.HttpContext.Session, "cart");
             return Task.FromResult(entity);
         }
 
@@ -37,7 +38,7 @@ namespace CleanArchi.Learn.Persistence.Repositories
             {
 
                 List<Item> cart = new List<Item>();
-                cart.Add(new Item { Product = product, Quantity = 1 });
+                cart.Add(new Item { ProductId = product.Id, Quantity = 1 });
                 SessionHelper.SetObjectAsJson(_httpContextAccessor.HttpContext.Session, "cart", cart);
             }
             else
@@ -50,7 +51,7 @@ namespace CleanArchi.Learn.Persistence.Repositories
                 }
                 else
                 {
-                    cart.Add(new Item { Product = product, Quantity = 1 });
+                    cart.Add(new Item { ProductId = product.Id, Quantity = 1 });
                 }
                 SessionHelper.SetObjectAsJson(_httpContextAccessor.HttpContext.Session, "cart", cart);
             }
@@ -58,7 +59,7 @@ namespace CleanArchi.Learn.Persistence.Repositories
         private int isExist(int id)
         {
             List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(_httpContextAccessor.HttpContext.Session, "cart");
-            return cart.FindIndex(p => p.Product.Id == id);
+            return cart.FindIndex(p => p.ProductId == id);
         }
         public void RemoveItemFromCart(int productId)
         {
@@ -87,7 +88,15 @@ namespace CleanArchi.Learn.Persistence.Repositories
         }
         public List<Item> GetCartItems()
         {
-            return SessionHelper.GetObjectFromJson<List<Item>>(_httpContextAccessor.HttpContext.Session, "cart");
+            var items = SessionHelper.GetObjectFromJson<List<Item>>(_httpContextAccessor.HttpContext.Session, "cart");
+            if (items != null)
+            {
+                foreach (var item in items)
+                {
+                    item.Product = _context.Products.Find(item.ProductId);
+                }
+            }
+            return items;
         }
 
         public Task DeleteAsync(Order entity)

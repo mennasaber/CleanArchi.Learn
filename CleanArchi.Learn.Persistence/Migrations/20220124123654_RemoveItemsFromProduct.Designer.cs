@@ -4,14 +4,16 @@ using CleanArchi.Learn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CleanArchi.Learn.Persistence.Migrations
 {
     [DbContext(typeof(CleanArchiDbContext))]
-    partial class CleanArchiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220124123654_RemoveItemsFromProduct")]
+    partial class RemoveItemsFromProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +31,7 @@ namespace CleanArchi.Learn.Persistence.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -301,10 +303,8 @@ namespace CleanArchi.Learn.Persistence.Migrations
                         .HasForeignKey("OrderId");
 
                     b.HasOne("CleanArchi.Learn.Domain.Entities.Product", "Product")
-                        .WithMany("Items")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Order");
 
@@ -372,11 +372,6 @@ namespace CleanArchi.Learn.Persistence.Migrations
                 });
 
             modelBuilder.Entity("CleanArchi.Learn.Domain.Entities.Order", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("CleanArchi.Learn.Domain.Entities.Product", b =>
                 {
                     b.Navigation("Items");
                 });
