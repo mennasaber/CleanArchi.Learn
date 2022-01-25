@@ -2,8 +2,10 @@
 using CleanArchi.Learn.Domain.Entities;
 using CleanArchi.Learn.MVC.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -108,7 +110,11 @@ namespace CleanArchi.Learn.Persistence.Repositories
         {
             throw new NotImplementedException();
         }
-
+        public async Task<IEnumerable<Order>> GetUserOrders(string userId)
+        {
+            var orders = await _context.Orders.Include(o => o.User).Include(o => o.Items).Where(o => o.User.Id == userId).ToListAsync();
+            return orders;
+        }
         public async Task<Order> GetByIdAsync(int id)
         {
             var order = await _context.Orders.FindAsync(id);

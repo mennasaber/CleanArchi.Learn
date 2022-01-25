@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CleanArchi.Learn.Application.Contracts
 {
@@ -11,5 +12,7 @@ namespace CleanArchi.Learn.Application.Contracts
         public void RemoveItemFromCart(int productId);
         public void DecreaseItemQuantity(int productId);
         public List<Item> GetCartItems();
+        public Task<IEnumerable<Order>> GetUserOrders(string userId);
+
     }
 }

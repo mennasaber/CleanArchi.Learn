@@ -1,0 +1,41 @@
+﻿@model IEnumerable<CleanArchi.Learn.Application.Features.Orders.Queries.GetUserOrders.GetUserOrdersVm>
+
+@{
+    ViewData["Title"] = "GetOrders";
+}
+
+<h1>GetOrders</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Items)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderedTime)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Items.Count)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderedTime)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

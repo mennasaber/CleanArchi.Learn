@@ -3,6 +3,7 @@ using CleanArchi.Learn.Application.Features.Orders.Queries.AddItemToCart;
 using CleanArchi.Learn.Application.Features.Orders.Queries.DecreaseItemFromCart;
 using CleanArchi.Learn.Application.Features.Orders.Queries.DeleteItemFromCart;
 using CleanArchi.Learn.Application.Features.Orders.Queries.GetCartItems;
+using CleanArchi.Learn.Application.Features.Orders.Queries.GetUserOrders;
 using CleanArchi.Learn.Application.Features.Users.Queries.GetUser;
 using CleanArchi.Learn.Domain.Entities;
 using MediatR;
@@ -58,6 +59,12 @@ namespace CleanArchi.Learn.MVC.Controllers
                 return RedirectToAction("Index","Home");
             }
             return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> GetOrders()
+        {
+            var user = await _mediator.Send(new GetCurrentUserQuery());
+            var orders = await _mediator.Send(new GetUserOrdersQuery() { UserId = user.Id });
+            return View(orders);
         }
     }
 }
