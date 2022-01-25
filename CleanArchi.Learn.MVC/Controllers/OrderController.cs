@@ -3,6 +3,7 @@ using CleanArchi.Learn.Application.Features.Orders.Queries.AddItemToCart;
 using CleanArchi.Learn.Application.Features.Orders.Queries.DecreaseItemFromCart;
 using CleanArchi.Learn.Application.Features.Orders.Queries.DeleteItemFromCart;
 using CleanArchi.Learn.Application.Features.Orders.Queries.GetCartItems;
+using CleanArchi.Learn.Application.Features.Orders.Queries.GetOrderDetails;
 using CleanArchi.Learn.Application.Features.Orders.Queries.GetUserOrders;
 using CleanArchi.Learn.Application.Features.Users.Queries.GetUser;
 using CleanArchi.Learn.Domain.Entities;
@@ -56,7 +57,7 @@ namespace CleanArchi.Learn.MVC.Controllers
             if (user != null && items.Count != 0)
             {
                 await _mediator.Send(new AddOrderCommand { Items = items, User = user, OrderedTime = System.DateTime.Now });
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index", "Home");
             }
             return RedirectToAction("Index");
         }
@@ -65,6 +66,11 @@ namespace CleanArchi.Learn.MVC.Controllers
             var user = await _mediator.Send(new GetCurrentUserQuery());
             var orders = await _mediator.Send(new GetUserOrdersQuery() { UserId = user.Id });
             return View(orders);
+        }
+        public async Task<IActionResult> OrderDetails(int orderId)
+        {
+            var orderDetails = await _mediator.Send(new GetOrderDetailsQuery() { OrderId = orderId });
+            return View(orderDetails);
         }
     }
 }

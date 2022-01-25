@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchi.Learn.Application.Features.Orders.Commands.AddOrder;
+using CleanArchi.Learn.Application.Features.Orders.Queries.GetOrderDetails;
 using CleanArchi.Learn.Application.Features.Orders.Queries.GetUserOrders;
 using CleanArchi.Learn.Application.Features.Products.Commands;
 using CleanArchi.Learn.Application.Features.Products.Commands.DeleteProduct;
@@ -27,7 +28,7 @@ namespace CleanArchi.Learn.Application.Profiles
             CreateMap<User, UserSignUpCommand>().ReverseMap();
             CreateMap<Order, AddOrderCommand>().ReverseMap();
             CreateMap<Order, GetUserOrdersVm>().ReverseMap();
-
+            CreateMap<Order, GetOrderDetailsVm>().ReverseMap();
         }
     }
 }

@@ -117,7 +117,14 @@ namespace CleanArchi.Learn.Persistence.Repositories
         }
         public async Task<Order> GetByIdAsync(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.Include(o => o.Items).Where(o=>o.Id==id).FirstOrDefaultAsync();
+            if(order != null)
+            {
+                foreach(var item in order.Items)
+                {
+                    item.Product = _context.Products.Find(item.ProductId);
+                }
+            }
             return order;
         }
 
