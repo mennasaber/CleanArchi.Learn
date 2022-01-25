@@ -3,9 +3,7 @@ using CleanArchi.Learn.Application.Features.Orders.Queries.AddItemToCart;
 using CleanArchi.Learn.Application.Features.Orders.Queries.DecreaseItemFromCart;
 using CleanArchi.Learn.Application.Features.Orders.Queries.DeleteItemFromCart;
 using CleanArchi.Learn.Application.Features.Orders.Queries.GetCartItems;
-using CleanArchi.Learn.Application.Features.Orders.Queries.GetOrder;
 using CleanArchi.Learn.Application.Features.Users.Queries.GetUser;
-using CleanArchi.Learn.Domain;
 using CleanArchi.Learn.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -47,7 +45,7 @@ namespace CleanArchi.Learn.MVC.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = AppConstants.USER_ROLE)]
+        [Authorize]
         public async Task<IActionResult> Confirm()
         {
             var items = await _mediator.Send(new GetCartItemsQuery());

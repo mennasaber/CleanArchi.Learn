@@ -35,7 +35,6 @@ namespace CleanArchi.Learn.MVC
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddApplicationServices();
             services.AddPersistenceServices(Configuration);
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,13 +52,14 @@ namespace CleanArchi.Learn.MVC
             }
 
             app.UseHttpsRedirection();
-
             app.UseStaticFiles();
-
-            app.UseSession();
             app.UseRouting();
+
+
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

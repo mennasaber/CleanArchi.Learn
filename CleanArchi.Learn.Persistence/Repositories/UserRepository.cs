@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CleanArchi.Learn.Persistence.Repositories
@@ -57,7 +57,8 @@ namespace CleanArchi.Learn.Persistence.Repositories
         }
         private string GetUserId()
         {
-            return SessionHelper.GetObjectFromJson<string>(_httpContextAccessor.HttpContext.Session, "user");
+            //return SessionHelper.GetObjectFromJson<string>(_httpContextAccessor.HttpContext.Session, "user");
+            return _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
         public Task DeleteAsync(User entity)
         {
