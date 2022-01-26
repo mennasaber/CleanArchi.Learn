@@ -92,6 +92,7 @@ namespace CleanArchi.Learn.Persistence.Repositories
                 if (cart[index].Quantity == 1)
                 {
                     cart.RemoveAt(index);
+                    SetCart(cart);
                     return;
                 }
                 cart[index].Quantity -= 1;
