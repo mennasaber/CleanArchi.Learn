@@ -6,6 +6,7 @@ using CleanArchi.Learn.Application.Features.Orders.Queries.GetCartItems;
 using CleanArchi.Learn.Application.Features.Orders.Queries.GetOrderDetails;
 using CleanArchi.Learn.Application.Features.Orders.Queries.GetUserOrders;
 using CleanArchi.Learn.Application.Features.Users.Queries.GetUser;
+using CleanArchi.Learn.Domain;
 using CleanArchi.Learn.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -34,17 +35,17 @@ namespace CleanArchi.Learn.MVC.Controllers
         public async Task<IActionResult> IncreaseItemQuantity(int id)
         {
             await _mediator.Send(new AddItemToCartQuery() { ProductId = id });
-            return RedirectToAction("Index");
+            return RedirectToAction(AppConstants.INDEX_ACTION);
         }
         public async Task<IActionResult> DecreaseItemQuantity(int id)
         {
             await _mediator.Send(new DecreaseItemFromCartQuery() { ProductId = id });
-            return RedirectToAction("Index");
+            return RedirectToAction(AppConstants.INDEX_ACTION);
         }
         public async Task<IActionResult> DeleteItem(int id)
         {
             await _mediator.Send(new DeleteItemFromCartQuery() { ProductId = id });
-            return RedirectToAction("Index");
+            return RedirectToAction(AppConstants.INDEX_ACTION);
         }
 
         [Authorize]
@@ -57,9 +58,9 @@ namespace CleanArchi.Learn.MVC.Controllers
             if (user != null && items.Count != 0)
             {
                 await _mediator.Send(new AddOrderCommand { Items = items, User = user, OrderedTime = System.DateTime.Now });
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(AppConstants.INDEX_ACTION, AppConstants.HOME_CONTROLLER);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction(AppConstants.INDEX_ACTION);
         }
         [Authorize]
         public async Task<IActionResult> GetOrders()

@@ -43,16 +43,15 @@ namespace CleanArchi.Learn.Persistence.Repositories
                     await _roleManager.CreateAsync(new IdentityRole(AppConstants.USER_ROLE));
                 }
                 await _userManager.AddToRoleAsync(user, AppConstants.USER_ROLE);
-                SaveUserId(user.Id);
                 await _signInManager.SignInAsync(user, isPersistent: false);
             }
             return result;
         }
         private void SaveUserId(string userId)
         {
-            if (SessionHelper.GetObjectFromJson<string>(_httpContextAccessor.HttpContext.Session, "user") == null)
+            if (SessionHelper.GetObjectFromJson<string>(_httpContextAccessor.HttpContext.Session, AppConstants.USER) == null)
             {
-                SessionHelper.SetObjectAsJson(_httpContextAccessor.HttpContext.Session, "user", userId);
+                SessionHelper.SetObjectAsJson(_httpContextAccessor.HttpContext.Session, AppConstants.USER, userId);
             }
         }
         private string GetUserId()
@@ -88,7 +87,6 @@ namespace CleanArchi.Learn.Persistence.Repositories
                 if (isValid)
                 {
                     await _signInManager.PasswordSignInAsync(user, password, false, user.LockoutEnabled);
-                    SaveUserId(user.Id);
                     return user;
                 }
             }

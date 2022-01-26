@@ -1,4 +1,5 @@
 ﻿using CleanArchi.Learn.Application.Contracts;
+using CleanArchi.Learn.Domain;
 using CleanArchi.Learn.Domain.Entities;
 using CleanArchi.Learn.MVC.Models;
 using Microsoft.AspNetCore.Http;
@@ -27,70 +28,79 @@ namespace CleanArchi.Learn.Persistence.Repositories
         {
             _context.Orders.Add(entity);
             _context.SaveChanges();
-            SessionHelper.RemoveObject(_httpContextAccessor.HttpContext.Session, "cart");
+            RemoveCart();
             return Task.FromResult(entity);
         }
-
+        private void RemoveCart()
+        {
+            SessionHelper.RemoveObject(_httpContextAccessor.HttpContext.Session, AppConstants.CART);
+        }
+        private List<Item> GetCart()
+        {
+            return SessionHelper.GetObjectFromJson<List<Item>>(_httpContextAccessor.HttpContext.Session, AppConstants.CART);
+        }
+        private void SetCart(List<Item> cart)
+        {
+            SessionHelper.SetObjectAsJson(_httpContextAccessor.HttpContext.Session, AppConstants.CART, cart);
+        }
         public void AddToCart(int productId)
         {
             // httpContext equals null after await !!!!!!!
             //var product = await _context.Products.FindAsync(productId);
             var product = _context.Products.Find(productId);
-            if (SessionHelper.GetObjectFromJson<List<Item>>(_httpContextAccessor.HttpContext.Session, "cart") == null)
+            var currentCart = GetCart();
+            if (currentCart == null)
             {
-
-                List<Item> cart = new List<Item>();
-                cart.Add(new Item { ProductId = product.Id, Quantity = 1 });
-                SessionHelper.SetObjectAsJson(_httpContextAccessor.HttpContext.Session, "cart", cart);
+                currentCart = new List<Item>();
+                currentCart.Add(new Item { ProductId = product.Id, Quantity = 1 });
             }
             else
             {
-                List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(_httpContextAccessor.HttpContext.Session, "cart");
                 int index = isExist(productId);
                 if (index != -1)
                 {
-                    cart[index].Quantity++;
+                    currentCart[index].Quantity++;
                 }
                 else
                 {
-                    cart.Add(new Item { ProductId = product.Id, Quantity = 1 });
+                    currentCart.Add(new Item { ProductId = product.Id, Quantity = 1 });
                 }
-                SessionHelper.SetObjectAsJson(_httpContextAccessor.HttpContext.Session, "cart", cart);
             }
+            SetCart(currentCart);
         }
         private int isExist(int id)
         {
-            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(_httpContextAccessor.HttpContext.Session, "cart");
+            List<Item> cart = GetCart();
             return cart.FindIndex(p => p.ProductId == id);
         }
         public void RemoveItemFromCart(int productId)
         {
-            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(_httpContextAccessor.HttpContext.Session, "cart");
+            List<Item> cart = GetCart();
             int index = isExist(productId);
             if (index != -1)
             {
                 cart.RemoveAt(index);
-                SessionHelper.SetObjectAsJson(_httpContextAccessor.HttpContext.Session, "cart", cart);
+                SetCart(cart);
             }
         }
         public void DecreaseItemQuantity(int productId)
         {
-            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(_httpContextAccessor.HttpContext.Session, "cart");
+            List<Item> cart = GetCart();
             int index = isExist(productId);
             if (index != -1)
             {
                 if (cart[index].Quantity == 1)
                 {
-                    RemoveItemFromCart(productId);
+                    cart.RemoveAt(index);
                     return;
                 }
                 cart[index].Quantity -= 1;
-                SessionHelper.SetObjectAsJson(_httpContextAccessor.HttpContext.Session, "cart", cart);
+                SetCart(cart);
             }
         }
         public List<Item> GetCartItems()
         {
-            var items = SessionHelper.GetObjectFromJson<List<Item>>(_httpContextAccessor.HttpContext.Session, "cart");
+            var items = GetCart();
             if (items != null)
             {
                 foreach (var item in items)
@@ -101,15 +111,6 @@ namespace CleanArchi.Learn.Persistence.Repositories
             return items;
         }
 
-        public Task DeleteAsync(Order entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Order>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
         public async Task<IEnumerable<Order>> GetUserOrders(string userId)
         {
             var orders = await _context.Orders.Include(o => o.User).Include(o => o.Items).Where(o => o.User.Id == userId).ToListAsync();
@@ -117,10 +118,10 @@ namespace CleanArchi.Learn.Persistence.Repositories
         }
         public async Task<Order> GetByIdAsync(int id)
         {
-            var order = await _context.Orders.Include(o => o.Items).Where(o=>o.Id==id).FirstOrDefaultAsync();
-            if(order != null)
+            var order = await _context.Orders.Include(o => o.Items).Where(o => o.Id == id).FirstOrDefaultAsync();
+            if (order != null)
             {
-                foreach(var item in order.Items)
+                foreach (var item in order.Items)
                 {
                     item.Product = _context.Products.Find(item.ProductId);
                 }
@@ -129,6 +130,16 @@ namespace CleanArchi.Learn.Persistence.Repositories
         }
 
         public Task UpdateAsync(Order entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(Order entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Order>> GetAllAsync()
         {
             throw new NotImplementedException();
         }

@@ -26,9 +26,9 @@ namespace CleanArchi.Learn.MVC.Controllers
             var user = await _mediator.Send(getUserQuery);
             if (user != null)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(AppConstants.INDEX_ACTION, AppConstants.HOME_CONTROLLER);
             }
-            ModelState.TryAddModelError("Login", AppConstants.INVALID_LOGIN);
+            ModelState.TryAddModelError(AppConstants.LOGIN, AppConstants.INVALID_LOGIN);
             return View(getUserQuery);
         }
         public IActionResult SignUp()
@@ -43,12 +43,12 @@ namespace CleanArchi.Learn.MVC.Controllers
                 var result = await _mediator.Send(userSignUpCommand);
                 if (result == null)
                 {
-                    ModelState.AddModelError("Username", "This username is token");
+                    ModelState.AddModelError(AppConstants.USERNAME,AppConstants.USERNAME_TOKEN_MESSAGE);
                     return View(userSignUpCommand);
                 }
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction(AppConstants.INDEX_ACTION, AppConstants.HOME_CONTROLLER);
                 }
                 foreach (var error in result.Errors)
                 {
