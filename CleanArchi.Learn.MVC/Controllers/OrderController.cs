@@ -61,6 +61,7 @@ namespace CleanArchi.Learn.MVC.Controllers
             }
             return RedirectToAction("Index");
         }
+        [Authorize]
         public async Task<IActionResult> GetOrders()
         {
             var user = await _mediator.Send(new GetCurrentUserQuery());
