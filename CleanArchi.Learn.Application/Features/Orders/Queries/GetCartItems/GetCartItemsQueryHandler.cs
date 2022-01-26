@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace CleanArchi.Learn.Application.Features.Orders.Queries.GetCartItems
 {
-    public class GetCartItemsHandler : IRequestHandler<GetCartItemsQuery, List<Item>>
+    public class GetCartItemsQueryHandler : IRequestHandler<GetCartItemsQuery, List<Item>>
     {
         private readonly IOrderRepository _orderRepository;
 
-        public GetCartItemsHandler(IOrderRepository orderRepository)
+        public GetCartItemsQueryHandler(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
         }

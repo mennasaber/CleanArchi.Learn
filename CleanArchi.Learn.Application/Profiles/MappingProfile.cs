@@ -21,7 +21,7 @@ namespace CleanArchi.Learn.Application.Profiles
         public MappingProfile()
         {
             CreateMap<Product, GetProductsVm>().ReverseMap();
-            CreateMap<Product, AddProductQuery>().ReverseMap();
+            CreateMap<Product, AddProductCommand>().ReverseMap();
             CreateMap<Product, GetProductVm>().ReverseMap();
             CreateMap<Product, UpdateProductCommand>().ReverseMap();
             CreateMap<Product, DeleteProductCommand>().ReverseMap();

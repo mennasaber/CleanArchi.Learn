@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CleanArchi.Learn.Application.Features.Products.Commands
 {
-    public class AddProductQuery :IRequest<int>
+    public class AddProductCommand :IRequest<int>
     {
         public string Name { get; set; }
         public float Price { get; set; }

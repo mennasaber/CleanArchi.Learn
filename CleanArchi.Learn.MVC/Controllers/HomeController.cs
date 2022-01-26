@@ -42,7 +42,7 @@ namespace CleanArchi.Learn.MVC.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Add(AddProductQuery addProductQuery)
+        public async Task<IActionResult> Add(AddProductCommand addProductQuery)
         {
             try
             {
